@@ -17,6 +17,7 @@ app.use(bodyParser.json());
 // Cors for cross origin allowance
 const cors = require('cors'); 
 app.use(cors());
+
 // Initialize the main project folder
 app.use(express.static('website'));
 
@@ -28,9 +29,17 @@ function listening() {
     console.log("server is listening"); 
     console.log(`running on localhost: ${port}`); 
 }; 
+
 // Initialize all route with a callback function
+function sendData (req, res) { 
+  res.send(projectData); 
+}; 
 
 // Callback function to complete GET '/all'
+app.get('/all', sendData); 
 
 // Post Route
-  
+
+
+// app.post('/flavor', addFlavor);  
+
