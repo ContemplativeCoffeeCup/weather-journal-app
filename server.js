@@ -48,8 +48,13 @@ const data = [];
 app.post( '/add', addData )
 // callback function, receiving temp, date, and response
 function addData (req, res) {
-  console.log(req.body)
-  data.push(req.body)
-  console.log(data); 
+  const newWeatherJournal = {
+    temperature: request.body.temperature,
+    date: request.body.date,
+    userResponse: request.body.userResponse
+  };
+
+  projectData.push(newWeatherJournal);
+  response.send(projectData);
 }
 
