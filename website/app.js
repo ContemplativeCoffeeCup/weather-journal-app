@@ -1,4 +1,4 @@
-/* Global Variables */
+// Global Variables
 const apiKey = "&appid=d9d904f2868225960afa8e681c2aeb72";
 const baseURL = `http://api.openweathermap.org/data/2.5/weather?zip=`;
 const units = "&units=imperial";
@@ -7,14 +7,13 @@ const units = "&units=imperial";
 let d = new Date();
 let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
 
-/* Function to GET Web API Data */
+// Function to GET Web API Data
 const getWeatherData = async(zipCode, apiKey, baseURL) => {
     let weatherURL = baseURL+zipCode+units+apiKey;
     // const response = await fech(zipCode);
     const response = await fetch(weatherURL);
     try {
         const data = await response.json();
-        console.log('data', data);
         return data;
     }catch(error) {
         console.log("error", error);
@@ -24,27 +23,22 @@ const getWeatherData = async(zipCode, apiKey, baseURL) => {
 // Event listener to add function to existing HTML DOM element
 document.getElementById("generate").addEventListener("click", generateJournal);
 
-/* Function called by event listener */
+// Function called by event listener
 async function generateJournal(event) {
     let zipCode = document.getElementById('zip').value;
     // API call
     getWeatherData(zipCode, apiKey, baseURL)
     .then(function(data) {
         userResponse = document.getElementById('feelings').value;
-        console.log("who am i", data)
         // add data to POST request
-        console.log(data.main.temp)
-        console.log(newDate)
-        console.log(userResponse)
         postData('/add', {temp:data.main.temp, date:newDate, userResponse:userResponse} )
+        // update UI
         updateUI()
     })
-    // .then(
-    //     updateUI()
-    // )
 };
 
-/* Function to POST data */
+
+// Function to POST data
 const postData = async ( url = '', data = {})=>{
     //console.log(data);
     const response = await fetch(url, {
@@ -67,17 +61,16 @@ const postData = async ( url = '', data = {})=>{
 }
 
 
-/* Function to GET Project Data */
-
+// Function to GET Project Data
 const updateUI = async() => {
     const request = await fetch('/all');
+    
     try{
         const allData = await request.json();
         console.log(allData);
         document.getElementById('date').innerHTML = allData[0].date;
         document.getElementById('temp').innerHTML = allData[0].temperature;
         document.getElementById('content').innerHTML = allData[0].userResponse;
-
     }catch(error){
         console.log("error", error);
     }
