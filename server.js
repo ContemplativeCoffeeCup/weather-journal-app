@@ -7,11 +7,8 @@ var express = require('express');
 // Start up an instance of app
 var app = express();
 
-/* Dependencies */
+// configure express to use body-parser as middle-ware.
 const bodyParser = require('body-parser');
-
-/* Middleware*/
-//Here we are configuring express to use body-parser as middle-ware.
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
@@ -32,7 +29,8 @@ function listening() {
     console.log(`running on localhost: ${port}`); 
 }; 
 
-/* Middleware*/
+///// GET ROUTE /////
+
 // Initialize all route with a callback function
 function sendData (req, res) { 
   res.send(projectData); 
@@ -42,25 +40,22 @@ function sendData (req, res) {
 // Callback function to complete GET '/all'
 app.get('/all', sendData); 
 
-/* Post Route */
+///// POST ROUTE /////
+
 // An empty array to hold data
 const data = [];
+
 // post() with URL path and callback function
 app.post( '/add', addData )
+
 // callback function, receiving temp, date, and response
 function addData (req, res) {
-// console.log(req.body)
   newWeatherJournal = {
     temperature: req.body.temp,
     date: req.body.date,
     userResponse: req.body.userResponse
   }
-
-//   console.log(req.body)
-//   data.push(req.body)
-//   console.log(data); 
   projectData.push(newWeatherJournal)
   res.send(projectData)
-//   console.log(projectData)
 }
 
