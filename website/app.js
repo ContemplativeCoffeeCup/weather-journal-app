@@ -8,7 +8,6 @@ let d = new Date();
 let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
 
 /* Function to GET Web API Data */
-
 const getWeatherData = async(zipCode, apiKey, baseURL) => {
     let weatherURL = baseURL+zipCode+units+apiKey;
     // const response = await fech(zipCode);
@@ -28,16 +27,21 @@ document.getElementById("generate").addEventListener("click", generateJournal);
 /* Function called by event listener */
 async function generateJournal(event) {
     let zipCode = document.getElementById('zip').value;
+    // API call
     getWeatherData(zipCode, apiKey, baseURL)
     .then(function(data) {
         userResponse = document.getElementById('feelings').value;
-        console.log("who am i", data);
+        console.log("who am i", data)
         // add data to POST request
         console.log(data.main.temp)
         console.log(newDate)
         console.log(userResponse)
-        postData('/add', {temp:data.main.temp, date:newDate, userResponse:userResponse} );
-    });
+        postData('/add', {temp:data.main.temp, date:newDate, userResponse:userResponse} )
+        updateUI()
+    })
+    // .then(
+    //     updateUI()
+    // )
 };
 
 /* Function to POST data */
@@ -65,3 +69,16 @@ const postData = async ( url = '', data = {})=>{
 
 /* Function to GET Project Data */
 
+const updateUI = async() => {
+    const request = await fetch('/all');
+    try{
+        const allData = await request.json();
+        console.log(allData);
+        document.getElementById('date').innerHTML = allData[0].date;
+        document.getElementById('temp').innerHTML = allData[0].temperature;
+        document.getElementById('content').innerHTML = allData[0].userResponse;
+
+    }catch(error){
+        console.log("error", error);
+    }
+}
