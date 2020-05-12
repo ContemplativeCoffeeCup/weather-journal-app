@@ -10,12 +10,12 @@ let newDate = d.getMonth()+'.'+ d.getDate()+'.'+ d.getFullYear();
 // Function to GET Web API Data
 const getWeatherData = async(zipCode, apiKey, baseURL) => {
     let weatherURL = baseURL+zipCode+units+apiKey;
-    // const response = await fech(zipCode);
     const response = await fetch(weatherURL);
     try {
         const data = await response.json();
         return data;
     }catch(error) {
+        //appropriately handle error
         console.log("error", error);
     }
 };
@@ -40,7 +40,6 @@ async function generateJournal(event) {
 
 // Function to POST data
 const postData = async ( url = '', data = {})=>{
-    //console.log(data);
     const response = await fetch(url, {
         method: 'POST',
         credentials: 'same-origin',
@@ -64,14 +63,17 @@ const postData = async ( url = '', data = {})=>{
 // Function to GET Project Data
 const updateUI = async() => {
     const request = await fetch('/all');
-    
+
     try{
+        //retrieve app data
         const allData = await request.json();
         console.log(allData);
+        // update DOM elements with app data
         document.getElementById('date').innerHTML = allData[0].date;
         document.getElementById('temp').innerHTML = allData[0].temperature;
         document.getElementById('content').innerHTML = allData[0].userResponse;
     }catch(error){
+        //appropriately handle error
         console.log("error", error);
     }
 }
