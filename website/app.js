@@ -28,10 +28,39 @@ document.getElementById("generate").addEventListener("click", generateJournal);
 /* Function called by event listener */
 async function generateJournal(event) {
     let zipCode = document.getElementById('zip').value;
-    getWeatherData(zipCode, apiKey, baseURL);
+    getWeatherData(zipCode, apiKey, baseURL)
+    .then(function(data) {
+        userResponse = document.getElementById('feelings').value;
+        console.log("who am i", data);
+        // add data to POST request
+        console.log(data.main.temp)
+        console.log(newDate)
+        console.log(userResponse)
+        postData('/add', {temp:data.main.temp, date:newDate, userResponse:userResponse} );
+    });
 };
 
 /* Function to POST data */
+const postData = async ( url = '', data = {})=>{
+    //console.log(data);
+    const response = await fetch(url, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+    });
+
+    try {
+        const newData = await response.json();
+        console.log(newData);
+        return newData
+    }catch(error) {
+        //appropriately handle error
+        console.log("error", error);
+    }
+}
 
 
 /* Function to GET Project Data */
